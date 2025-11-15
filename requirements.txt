@@ -5,3 +5,7 @@ python-dotenv
 loguru
 telebot
 apscheduler
+SQLAlchemy
+urllib3
+pytest
+Flask

@@ -1,37 +1,61 @@
-# scraper/pdf_parser.py
+import io
 import pdfplumber
 from loguru import logger
 
-def parse_pdf_jobs(pdf_path, keywords=None):
-    """
-    Extracts lines from a PDF that look like job titles/announcements.
-    Returns a list of job-like dicts:
-      {'title': <line>, 'link': pdf_path, 'company': 'UNKNOWN', 'source': pdf_path}
-    """
-    if keywords is None:
-        keywords = ["engineer", "developer", "assistant", "it", "vacancy", "recruitment"]
+DEFAULT_KEYWORDS = [
+    "engineer",
+    "developer",
+    "assistant",
+    "it",
+    "vacancy",
+    "recruitment",
+]
 
-    jobs = []
+
+def _iter_pages(pdf_data):
+    """
+    Accept either a file path or raw PDF bytes.
+    """
+    if isinstance(pdf_data, bytes):
+        pdf = pdfplumber.open(io.BytesIO(pdf_data))
+    else:
+        pdf = pdfplumber.open(pdf_data)
     try:
-        with pdfplumber.open(pdf_path) as pdf:
-            for page in pdf.pages:
-                text = page.extract_text()
-                if not text:
-                    continue
-                for line in text.splitlines():
-                    clean = line.strip()
-                    if not clean:
-                        continue
-                    lower = clean.lower()
-                    if any(k in lower for k in keywords):
-                        jobs.append({
-                            "title": clean,
-                            "link": pdf_path,
-                            "company": "UNKNOWN",
-                            "source": pdf_path
-                        })
-    except Exception as e:
-        logger.error(f"PDF parsing failed for {pdf_path}: {e}")
+        for page in pdf.pages:
+            yield page
+    finally:
+        try:
+            pdf.close()
+        except Exception:
+            pass
 
-    logger.info(f"📄 PDF parser found {len(jobs)} potential job lines in {pdf_path}.")
+
+def parse_pdf_jobs(pdf_data, keywords=None, max_pages=50):
+    keywords = keywords or DEFAULT_KEYWORDS
+    jobs = []
+
+    try:
+        for page_number, page in enumerate(_iter_pages(pdf_data)):
+            if page_number >= max_pages:
+                break
+
+            text = page.extract_text() or ""
+            for line in text.splitlines():
+                clean = line.strip()
+                if not clean:
+                    continue
+
+                lower = clean.lower()
+                if any(k in lower for k in keywords):
+                    jobs.append({
+                        "title": clean,
+                        "link": str(pdf_data),
+                        "company": "UNKNOWN",
+                        "source": str(pdf_data)
+                    })
+
+    except Exception as e:
+        logger.error("PDF parsing failed: %s", e)
+
+    logger.info("📄 PDF parser found %d job-like lines", len(jobs))
     return jobs

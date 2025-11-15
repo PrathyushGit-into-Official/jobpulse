@@ -1,0 +1,19 @@
+[Unit]
+Description=JobPulse 24x7 Automated Job Scraper
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory= C:/Users/sprat/jobpulse
+EnvironmentFile= C:/Users/sprat/jobpulse.env
+ExecStart= C:/Users/sprat/jobpulse/venv/bin/python main.py
+Restart=always
+RestartSec=5
+User=Prathyush762
+
+# Logs automatically go to journalctl
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -206,3 +206,61 @@
 2025-11-04 14:47:26.174 | INFO     | scraper.bank_scraper:scrape_bank_jobs:56 - 🏦 Bank scrapers found 173 candidates.
 2025-11-04 14:47:26.244 | INFO     | core.job_checker:check_and_notify:35 - No new jobs found this cycle.
 2025-11-04 14:47:26.244 | INFO     | __main__:run_cycle:23 - ✅ Cycle completed successfully.
+2025-11-15 12:18:16.718 | INFO     | __main__:run_cycle:19 - 🚀 JobPulse cycle started at 2025-11-15T06:48:16.718494
+2025-11-15 12:18:16.732 | INFO     | utils.db:init_db:58 - ✅ Database initialized at %s
+2025-11-15 12:28:11.430 | INFO     | __main__:run_cycle:19 - 🚀 JobPulse cycle started at 2025-11-15T06:58:11.430275
+2025-11-15 12:31:51.859 | INFO     | __main__:run_cycle:19 - 🚀 JobPulse cycle started at 2025-11-15T07:01:51.859499
+2025-11-15 12:31:51.882 | INFO     | utils.db:init_db:58 - ✅ Database initialized at %s
+2025-11-15 12:31:51.886 | INFO     | scraper.mnc_scraper:scrape_mnc_jobs:65 - 🔍 Scraping MNC job portals...
+2025-11-15 12:31:53.519 | WARNING  | scraper.mnc_scraper:_safe_get:55 - GET failed for %s -> %s
+2025-11-15 12:31:57.750 | INFO     | scraper.mnc_scraper:scrape_mnc_jobs:113 - 🔍 MNC scraper found %d jobs
+2025-11-15 12:31:57.752 | INFO     | scraper.gov_scraper:scrape_gov_jobs:62 - 🏛️ Scraping government job portals...
+2025-11-15 12:31:59.984 | WARNING  | scraper.gov_scraper:_safe_get:52 - GET failed for %s -> %s
+2025-11-15 12:32:00.312 | WARNING  | scraper.gov_scraper:_safe_get:52 - GET failed for %s -> %s
+2025-11-15 12:32:01.174 | WARNING  | scraper.gov_scraper:_safe_get:52 - GET failed for %s -> %s
+2025-11-15 12:32:01.174 | INFO     | scraper.gov_scraper:scrape_gov_jobs:108 - 🏛️ GOV scraper found %d jobs
+2025-11-15 12:32:01.177 | INFO     | scraper.bank_scraper:scrape_bank_jobs:61 - 🏦 Scraping bank portals...
+2025-11-15 12:32:04.920 | INFO     | scraper.bank_scraper:scrape_bank_jobs:107 - 🏦 Bank scraper found %d jobs
+2025-11-15 12:32:04.925 | INFO     | core.job_checker:check_and_notify:15 - Checking %d jobs...
+2025-11-15 12:32:04.976 | INFO     | utils.db:add_job:89 - 🆕 Job saved: %s (%s)
+2025-11-15 12:32:04.990 | INFO     | utils.db:add_job:89 - 🆕 Job saved: %s (%s)
+2025-11-15 12:32:05.017 | INFO     | utils.db:add_job:89 - 🆕 Job saved: %s (%s)
+2025-11-15 12:32:05.145 | INFO     | utils.db:add_job:89 - 🆕 Job saved: %s (%s)
+2025-11-15 12:32:05.169 | INFO     | utils.db:add_job:89 - 🆕 Job saved: %s (%s)
+2025-11-15 12:32:05.251 | INFO     | utils.db:add_job:89 - 🆕 Job saved: %s (%s)
+2025-11-15 12:32:05.275 | INFO     | utils.db:add_job:89 - 🆕 Job saved: %s (%s)
+2025-11-15 12:32:05.328 | INFO     | utils.db:add_job:89 - 🆕 Job saved: %s (%s)
+2025-11-15 12:32:05.375 | INFO     | utils.db:add_job:89 - 🆕 Job saved: %s (%s)
+2025-11-15 12:32:05.387 | INFO     | utils.db:add_job:89 - 🆕 Job saved: %s (%s)
+2025-11-15 12:32:05.397 | INFO     | utils.db:add_job:89 - 🆕 Job saved: %s (%s)
+2025-11-15 12:32:05.410 | INFO     | utils.db:add_job:89 - 🆕 Job saved: %s (%s)
+2025-11-15 12:32:05.430 | INFO     | utils.db:add_job:89 - 🆕 Job saved: %s (%s)
+2025-11-15 12:32:05.445 | INFO     | utils.db:add_job:89 - 🆕 Job saved: %s (%s)
+2025-11-15 12:32:05.469 | INFO     | core.job_checker:check_and_notify:56 - Found %d new jobs.
+2025-11-15 12:32:08.777 | INFO     | utils.notifier:send_email:70 - 📧 Email sent successfully to %s
+2025-11-15 12:32:10.760 | WARNING  | utils.notifier:_retry_loop:31 - Attempt %d/%d failed: %s
+2025-11-15 12:32:13.184 | WARNING  | utils.notifier:_retry_loop:31 - Attempt %d/%d failed: %s
+2025-11-15 12:32:16.585 | WARNING  | utils.notifier:_retry_loop:31 - Attempt %d/%d failed: %s
+2025-11-15 12:32:16.586 | ERROR    | utils.notifier:_retry_loop:35 - All %d attempts failed. Last error: %s
+2025-11-15 12:32:16.586 | ERROR    | utils.notifier:send_telegram:102 - ❌ Telegram failed after retries: %s
+2025-11-15 12:32:16.586 | INFO     | core.job_checker:check_and_notify:75 - Summary: %s
+2025-11-15 12:32:16.594 | INFO     | __main__:run_cycle:54 - Cycle finished.
+2025-11-15 12:50:31.779 | INFO     | __main__:run_cycle:20 - 🚀 JobPulse cycle started at 2025-11-15T07:20:31.779837+00:00
+2025-11-15 12:50:31.785 | INFO     | utils.db:init_db:58 - ✅ Database initialized at C:\Users\sprat\jobpulse\data\jobs.db
+2025-11-15 12:50:31.786 | INFO     | scraper.mnc_scraper:scrape_mnc_jobs:66 - 🔍 Scraping MNC job portals...
+2025-11-15 12:50:33.675 | WARNING  | scraper.mnc_scraper:_safe_get:56 - GET failed for https://www.infosys.com/careers -> 403 Client Error: Forbidden for url: https://www.infosys.com/careers
+2025-11-15 12:50:38.517 | INFO     | scraper.mnc_scraper:scrape_mnc_jobs:114 - 🔍 MNC scraper found 79 jobs
+2025-11-15 12:50:38.521 | INFO     | __main__:run_cycle:32 - Scraper MNC returned 79 items
+2025-11-15 12:50:38.521 | INFO     | scraper.gov_scraper:scrape_gov_jobs:63 - 🏛️ Scraping government job portals...
+2025-11-15 12:50:48.256 | WARNING  | scraper.gov_scraper:_safe_get:53 - GET failed for https://www.drdo.gov.in/careers -> 404 Client Error: Not Found for url: https://www.drdo.gov.in/drdo/careers
+2025-11-15 12:50:48.803 | WARNING  | scraper.gov_scraper:_safe_get:53 - GET failed for https://www.nic.in/careers/ -> 403 Client Error: Forbidden for url: https://www.nic.in/careers/
+2025-11-15 12:50:49.536 | WARNING  | scraper.gov_scraper:_safe_get:53 - GET failed for https://careers.bhel.in/bhel/jsp/ -> 404 Client Error:  for url: https://careers.bhel.in/bhel/jsp/
+2025-11-15 12:50:49.536 | INFO     | scraper.gov_scraper:scrape_gov_jobs:109 - 🏛️ GOV scraper found 7 jobs
+2025-11-15 12:50:49.540 | INFO     | __main__:run_cycle:32 - Scraper GOV returned 7 items
+2025-11-15 12:50:49.540 | INFO     | scraper.bank_scraper:scrape_bank_jobs:62 - 🏦 Scraping bank portals...
+2025-11-15 12:50:54.105 | INFO     | scraper.bank_scraper:scrape_bank_jobs:108 - 🏦 Bank scraper found 87 jobs
+2025-11-15 12:50:54.111 | INFO     | __main__:run_cycle:32 - Scraper BANK returned 87 items
+2025-11-15 12:50:54.111 | INFO     | core.job_checker:check_and_notify:17 - Checking 173 jobs...
+2025-11-15 12:50:54.560 | INFO     | core.job_checker:check_and_notify:63 - No new jobs found this cycle.
+2025-11-15 12:50:54.561 | INFO     | core.job_checker:check_and_notify:76 - Summary: {'new_jobs': 0, 'stored': 0, 'notified': False, 'notifications': {}, 'started_at': '2025-11-15T07:20:54.111410', 'finished_at': '2025-11-15T07:20:54.561244'}
+2025-11-15 12:50:54.570 | INFO     | __main__:run_cycle:55 - Cycle finished.

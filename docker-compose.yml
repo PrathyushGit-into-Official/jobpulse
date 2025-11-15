@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  jobpulse:
+    build: .
+    image: jobpulse:latest
+    restart: unless-stopped
+    container_name: jobpulse
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}

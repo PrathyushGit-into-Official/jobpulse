@@ -2,15 +2,27 @@ name: JobPulse 24x7
 
 on:
   schedule:
-    - cron: "0 */6 * * *"  # every 6 hours
+    - cron: "0 */6 * * *"     # every 6 hours
   workflow_dispatch:
 
 jobs:
   run-jobpulse:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Verify required secrets
+        run: |
+          if [ -z "${{ secrets.EMAIL_USER }}" ] || [ -z "${{ secrets.EMAIL_PASS }}" ]; then
+            echo "❌ Missing EMAIL_USER or EMAIL_PASS"
+            exit 1
+          fi
+
+          if [ -z "${{ secrets.TELEGRAM_TOKEN }}" ] || [ -z "${{ secrets.TELEGRAM_CHAT_ID }}" ]; then
+            echo "⚠️ Telegram creds missing — Telegram notifications disabled"
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -18,12 +30,32 @@ jobs:
           python-version: "3.10"
 
       - name: Install dependencies
-        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Prepare data + logs folders
+        run: |
+          mkdir -p logs data
+          echo "🔵 JobPulse run started at: $(date -u)" >> logs/app.log
 
       - name: Run JobPulse
+        id: run_jobpulse
         env:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: python main.py
+          JOBPULSE_DB_PATH: data/jobs.db
+        run: |
+          set -o pipefail
+          python main.py 2>&1 | tee -a logs/app.log
+
+      - name: Upload logs + DB
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jobpulse-artifacts-${{ github.run_id }}
+          path: |
+            logs/app.log
+            data/jobs.db

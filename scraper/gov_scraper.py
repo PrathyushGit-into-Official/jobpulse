@@ -1,60 +1,110 @@
 # scraper/gov_scraper.py
 import time
+import os
 from urllib.parse import urljoin
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from bs4 import BeautifulSoup
 from loguru import logger
 
-HEADERS = {"User-Agent": "JobPulseBot/1.0 (+https://github.com/PrathyushGit-into-Official/jobpulse)"}
-REQUEST_TIMEOUT = 10
-POLITE_DELAY = 1.0
+HEADERS = {
+    "User-Agent": os.getenv("JOBPULSE_USER_AGENT", "JobPulseBot/1.0")
+}
 
-def _safe_get(url):
+REQUEST_TIMEOUT = float(os.getenv("JOBPULSE_REQUEST_TIMEOUT", "10"))
+POLITE_DELAY = float(os.getenv("JOBPULSE_POLITE_DELAY", "0.6"))
+MAX_RETRIES = int(os.getenv("JOBPULSE_MAX_RETRIES", "3"))
+BACKOFF_FACTOR = float(os.getenv("JOBPULSE_RETRY_BACKOFF", "0.5"))
+
+DEFAULT_URLS = {
+    "ISRO": "https://www.isro.gov.in/Careers.html",
+    "DRDO": "https://www.drdo.gov.in/careers",
+    "NIC": "https://www.nic.in/careers/",
+    "BHEL": "https://careers.bhel.in/bhel/jsp/",
+}
+
+KEYWORDS = ["engineer", "recruitment", "vacancy", "it", "assistant", "scientist"]
+
+
+def _build_session():
+    session = requests.Session()
+    retry = Retry(
+        total=MAX_RETRIES,
+        read=MAX_RETRIES,
+        connect=MAX_RETRIES,
+        backoff_factor=BACKOFF_FACTOR,
+        status_forcelist=[429, 500, 502, 503, 504],
+        allowed_methods=["GET"],
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
+    session.headers.update(HEADERS)
+    return session
+
+
+def _safe_get(session, url):
     try:
-        resp = requests.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT)
+        resp = session.get(url, timeout=REQUEST_TIMEOUT)
         resp.raise_for_status()
         return resp
     except Exception as e:
-        logger.error(f"Request failed for {url}: {e}")
+        logger.warning(f"GET failed for {url} -> {e}")
         return None
 
-def scrape_gov_jobs():
-    """
-    Scrapes government and PSU sites for job links and returns list of job dicts.
-    """
-    logger.info("🏛️ Scraping government and PSU portals...")
+
+def _looks_like_job_title(text):
+    t = (text or "").lower()
+    return any(k in t for k in KEYWORDS)
+
+
+def scrape_gov_jobs(urls=None, session=None):
+    logger.info("🏛️ Scraping government job portals...")
+
     jobs = []
+    seen = set()
 
-    urls = {
-        "ISRO": "https://www.isro.gov.in/Careers.html",
-        "DRDO": "https://www.drdo.gov.in/careers",
-        "NIC": "https://www.nic.in/careers/",
-        "BHEL": "https://careers.bhel.in/bhel/jsp/",
-    }
+    urls = urls or DEFAULT_URLS
+    session = session or _build_session()
 
-    for org, url in urls.items():
-        resp = _safe_get(url)
-        if not resp:
-            continue
-
-        soup = BeautifulSoup(resp.text, "html.parser")
-
-        # Generic link scan; refine per-site if needed
-        for a in soup.find_all("a", href=True):
-            title = a.get_text(strip=True)
-            if not title:
+    for dept, base_url in urls.items():
+        try:
+            resp = _safe_get(session, base_url)
+            if not resp:
                 continue
-            link = a["href"]
-            if any(k in title.lower() for k in ["engineer", "recruitment", "vacancy", "it", "assistant", "scientist"]):
-                full_link = link if link.startswith("http") else urljoin(url, link)
+
+            soup = BeautifulSoup(resp.text, "html.parser")
+
+            for a in soup.find_all("a", href=True):
+                title = a.get_text(strip=True)
+
+                if not title:
+                    continue
+
+                if not _looks_like_job_title(title):
+                    continue
+
+                link = a["href"]
+                full_link = link if link.startswith("http") else urljoin(base_url, link)
+                full_link = full_link.split("#")[0]
+
+                if full_link in seen:
+                    continue
+
+                seen.add(full_link)
+
                 jobs.append({
                     "title": title,
                     "link": full_link,
-                    "company": org,
-                    "source": url
+                    "company": dept,
+                    "source": base_url,
                 })
 
-        time.sleep(POLITE_DELAY)
+            time.sleep(POLITE_DELAY)
 
-    logger.info(f"🏛️ Govt scrapers found {len(jobs)} candidates.")
+        except Exception as e:
+            logger.exception(f"Error scraping {dept}: {e}")
+
+    logger.info(f"🏛️ GOV scraper found {len(jobs)} jobs")
     return jobs

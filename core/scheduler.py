@@ -1,36 +1,56 @@
-# core/scheduler.py
-from apscheduler.schedulers.blocking import BlockingScheduler
+import signal
+import sys
 from loguru import logger
-from core.config import SCRAPE_INTERVAL_HOURS
+from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+
+from core.config import SCRAPE_INTERVAL_HOURS, DATABASE_PATH
 
 def _get_runner():
-    """
-    Import the run_cycle function lazily to avoid circular imports
-    (main imports scheduler; scheduler should not import main at module load).
-    """
     try:
         from main import run_cycle
         return run_cycle
     except Exception as e:
-        logger.error(f"Could not import run_cycle from main: {e}")
+        logger.error("Failed to import run_cycle: %s", e)
         return None
 
+def _make_jobstore_url(db_path):
+    return f"sqlite:///{str(db_path)}"
+
 def start_scheduler():
-    """
-    Start a blocking scheduler that runs run_cycle() every SCRAPE_INTERVAL_HOURS.
-    Use lazy import to avoid circular imports when this module is imported.
-    """
     runner = _get_runner()
     if not runner:
-        logger.error("Scheduler cannot start: runner not available.")
+        logger.error("Scheduler cannot start — run_cycle missing.")
         return
 
-    scheduler = BlockingScheduler()
-    scheduler.add_job(runner, "interval", hours=SCRAPE_INTERVAL_HOURS)
-    logger.info(f"🔁 Scheduler started: runs every {SCRAPE_INTERVAL_HOURS} hours.")
-    try:
-        scheduler.start()
-    except (KeyboardInterrupt, SystemExit):
-        logger.info("Scheduler stopped by user.")
-    except Exception as e:
-        logger.error(f"Scheduler error: {e}")
+    jobstores = {
+        "default": SQLAlchemyJobStore(
+            url=_make_jobstore_url(DATABASE_PATH)
+        )
+    }
+
+    scheduler = BlockingScheduler(jobstores=jobstores)
+
+    scheduler.add_job(
+        runner,
+        "interval",
+        hours=SCRAPE_INTERVAL_HOURS,
+        id="jobpulse_cycle",
+        replace_existing=True,
+        max_instances=1,
+        coalesce=True,
+    )
+
+    def shutdown(_sig, _frame):
+        logger.info("Scheduler shutting down.")
+        try:
+            scheduler.shutdown(wait=False)
+        finally:
+            sys.exit(0)
+
+    signal.signal(signal.SIGINT, shutdown)
+    signal.signal(signal.SIGTERM, shutdown)
+
+    logger.info("⏱️ Scheduler started (every %s hours).", SCRAPE_INTERVAL_HOURS)
+
+    scheduler.start()
