@@ -1,61 +1,38 @@
-import io
+# scraper/pdf_parser.py
 import pdfplumber
 from loguru import logger
 
-DEFAULT_KEYWORDS = [
-    "engineer",
-    "developer",
-    "assistant",
-    "it",
-    "vacancy",
-    "recruitment",
-]
-
-
-def _iter_pages(pdf_data):
+def parse_pdf_jobs(pdf_path, keywords=None):
     """
-    Accept either a file path or raw PDF bytes.
+    Extracts lines from a PDF that look like job titles/announcements.
+    Returns a list of job-like dicts:
+      {'title': <line>, 'link': pdf_path, 'company': 'UNKNOWN', 'source': pdf_path}
     """
-    if isinstance(pdf_data, bytes):
-        pdf = pdfplumber.open(io.BytesIO(pdf_data))
-    else:
-        pdf = pdfplumber.open(pdf_data)
-    try:
-        for page in pdf.pages:
-            yield page
-    finally:
-        try:
-            pdf.close()
-        except Exception:
-            pass
+    if keywords is None:
+        keywords = ["engineer", "developer", "assistant", "it", "vacancy", "recruitment"]
 
-
-def parse_pdf_jobs(pdf_data, keywords=None, max_pages=50):
-    keywords = keywords or DEFAULT_KEYWORDS
     jobs = []
-
     try:
-        for page_number, page in enumerate(_iter_pages(pdf_data)):
-            if page_number >= max_pages:
-                break
-
-            text = page.extract_text() or ""
-            for line in text.splitlines():
-                clean = line.strip()
-                if not clean:
+        with pdfplumber.open(pdf_path) as pdf:
+            for page in pdf.pages:
+                text = page.extract_text()
+                if not text:
                     continue
-
-                lower = clean.lower()
-                if any(k in lower for k in keywords):
-                    jobs.append({
-                        "title": clean,
-                        "link": str(pdf_data),
-                        "company": "UNKNOWN",
-                        "source": str(pdf_data)
-                    })
-
+                for line in text.splitlines():
+                    clean = line.strip()
+                    if not clean:
+                        continue
+                    lower = clean.lower()
+                    if any(k in lower for k in keywords):
+                        jobs.append({
+                            "title": clean,
+                            "link": pdf_path,
+                            "company": "UNKNOWN",
+                            "source": pdf_path
+                        })
     except Exception as e:
-        logger.error("PDF parsing failed: %s", e)
+        # Use {} placeholder style or f-string; loguru supports this formatting
+        logger.error("PDF parsing failed for {}: {}", pdf_path, e)
 
-    logger.info("📄 PDF parser found %d job-like lines", len(jobs))
+    logger.info("📄 PDF parser found {} potential job lines in {}.", len(jobs), pdf_path)
     return jobs
