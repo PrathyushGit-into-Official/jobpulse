@@ -18,10 +18,55 @@ MAX_RETRIES = int(os.getenv("JOBPULSE_MAX_RETRIES", "3"))
 BACKOFF_FACTOR = float(os.getenv("JOBPULSE_RETRY_BACKOFF", "0.5"))
 
 DEFAULT_URLS = {
+    # Indian IT Giants (Top Tier)
     "TCS": "https://www.tcs.com/careers",
     "Infosys": "https://www.infosys.com/careers",
-    "Tech Mahindra": "https://careers.techmahindra.com/",
     "Wipro": "https://careers.wipro.com/",
+    "Tech Mahindra": "https://careers.techmahindra.com/",
+    "HCL": "https://www.hcltech.com/careers",
+    "LTIMindtree": "https://careers.ltimindtree.com/",
+    "Cognizant": "https://careers.cognizant.com/global/en",
+
+    # Global MNCs with Big Presence in India
+    "Accenture": "https://www.accenture.com/in-en/careers",
+    "IBM": "https://www.ibm.com/careers/",
+    "Google India": "https://careers.google.com/locations/india/",
+    "Microsoft India": "https://careers.microsoft.com/",
+    "Amazon India": "https://www.amazon.jobs/en/locations/india",
+    "Meta (Facebook)": "https://www.metacareers.com/",
+    "Oracle": "https://www.oracle.com/corporate/careers/",
+    "SAP": "https://jobs.sap.com/",
+    "Siemens": "https://jobs.siemens.com/",
+    "Dell Technologies": "https://jobs.dell.com/",
+    "Intel": "https://jobs.intel.com/",
+    "NVIDIA": "https://www.nvidia.com/en-in/about-nvidia/careers/",
+    "Qualcomm": "https://www.qualcomm.com/company/careers",
+
+    # Big Finance + Tech MNCs (FinTech/Bank Tech)
+    "JPMorgan Chase": "https://careers.jpmorgan.com/global/en/home",
+    "Goldman Sachs": "https://www.goldmansachs.com/careers/",
+    "State Street": "https://careers.statestreet.com/",
+
+    # Healthcare + Tech MNCs
+    "Carelon Global Solutions": "https://careers.carelon.com/",
+    "Optum (UHG)": "https://careers.unitedhealthgroup.com/",
+    "Philips": "https://www.careers.philips.com/global/en",
+
+    # Top Product-Based Indian/Global Tech Companies
+    "Practo": "https://practo.com/company/careers",
+    "Zoho": "https://careers.zoho.com/",
+    "Freshworks": "https://www.freshworks.com/company/careers/",
+    "Swiggy": "https://careers.swiggy.com/",
+    "Zerodha": "https://careers.zerodha.com/",
+    "PhonePe": "https://www.phonepe.com/careers/",
+    "Paytm": "https://paytm.com/careers",
+    "Ola": "https://www.olacabs.com/careers",
+
+    # Consulting + IT Services MNCs
+    "Deloitte": "https://jobsindia.deloitte.com/",
+    "KPMG": "https://kpmg.com/in/en/home/careers.html",
+    "EY": "https://www.ey.com/en_in/careers",
+    "PwC": "https://www.pwc.in/careers.html"
 }
 
 KEYWORDS = ["engineer", "developer", "software", "it", "trainee", "intern"]

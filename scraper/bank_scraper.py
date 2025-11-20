@@ -18,10 +18,48 @@ MAX_RETRIES = int(os.getenv("JOBPULSE_MAX_RETRIES", "3"))
 BACKOFF_FACTOR = float(os.getenv("JOBPULSE_RETRY_BACKOFF", "0.5"))
 
 DEFAULT_URLS = {
+    # Already given
     "SBI": "https://sbi.co.in/careers",
     "HDFC": "https://www.hdfcbank.com/personal/about-us/careers",
     "ICICI": "https://www.icicicareers.com/website/ICICI_Careers/",
+
+    # Public Sector Banks
+    "Bank of Baroda": "https://www.bankofbaroda.in/career",
+    "Punjab National Bank": "https://www.pnbindia.in/Recruitments.aspx",
+    "Canara Bank": "https://canarabank.com/pages/careers",
+    "Indian Bank": "https://www.indianbank.in/career/",
+    "Bank of India": "https://bankofindia.co.in/career",
+    "Union Bank of India": "https://www.unionbankofindia.co.in/english/recruitment.aspx",
+    "UCO Bank": "https://www.ucobank.com/en/career",
+    "Bank of Maharashtra": "https://bankofmaharashtra.in/recruitment",
+    "Indian Overseas Bank": "https://www.iob.in/careers.aspx",
+    "Central Bank of India": "https://centralbankofindia.co.in/en/recruitments",
+
+    # Major Private Banks
+    "Axis Bank": "https://www.axisbank.com/careers",
+    "Kotak Mahindra Bank": "https://www.kotak.com/en/about-us/careers.html",
+    "IndusInd Bank": "https://www.indusind.com/in/en/personal/careers.html",
+    "Yes Bank": "https://www.yesbank.in/about-us/careers",
+    "IDFC First Bank": "https://www.idfcfirstbank.com/careers",
+    "RBL Bank": "https://www.rblbank.com/careers",
+    "Federal Bank": "https://www.federalbank.co.in/careers",   # requested
+
+    # Other Private Banks
+    "South Indian Bank": "https://www.southindianbank.com/Careers",
+    "Karur Vysya Bank": "https://www.kvb.co.in/careers/",
+    "Tamilnad Mercantile Bank": "https://www.tmb.in/careers",
+    "DCB Bank": "https://www.dcbbank.com/careers",
+    "Jammu & Kashmir Bank": "https://www.jkbank.com/others/common/jobportal.php",
+    "Dhanlaxmi Bank": "https://www.dhanbank.com/careers",
+    "City Union Bank": "https://www.cityunionbank.com/web-page/careers",
+
+    # Small Finance Banks (Top ones)
+    "AU Small Finance Bank": "https://www.aubank.in/about/careers",
+    "Equitas Small Finance Bank": "https://www.equitasbank.com/careers",
+    "Ujjivan Small Finance Bank": "https://www.ujjivansfb.in/careers",
+    "Jana Small Finance Bank": "https://www.janabank.com/careers"
 }
+
 
 KEYWORDS = ["it", "developer", "analyst", "technology", "officer", "programmer"]
 

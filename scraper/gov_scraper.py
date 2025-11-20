@@ -18,10 +18,56 @@ MAX_RETRIES = int(os.getenv("JOBPULSE_MAX_RETRIES", "3"))
 BACKOFF_FACTOR = float(os.getenv("JOBPULSE_RETRY_BACKOFF", "0.5"))
 
 DEFAULT_URLS = {
+    # Core Government Engineering Organizations
     "ISRO": "https://www.isro.gov.in/Careers.html",
     "DRDO": "https://www.drdo.gov.in/careers",
     "NIC": "https://www.nic.in/careers/",
     "BHEL": "https://careers.bhel.in/bhel/jsp/",
+
+    # Space & Aviation
+    "HAL (Hindustan Aeronautics Ltd)": "https://hal-india.co.in/Careers/M__206",
+    "BEL (Bharat Electronics Ltd)": "https://bel-india.in/careers",
+    "AAI (Airports Authority of India)": "https://www.aai.aero/en/careers/recruitment",
+
+    # Power & Energy Sector PSUs
+    "NTPC": "https://www.ntpc.co.in/careers",
+    "ONGC": "https://www.ongcindia.com/wps/wcm/connect/en/career/",
+    "GAIL": "https://gailonline.com/CRApplyingGail.html",
+    "HPCL": "https://jobs.hpcl.co.in/Recruit_New/",
+    "BPCL": "https://www.bharatpetroleum.in/careers/careers.aspx",
+    "IOCL": "https://iocl.com/latest-job-opening",
+
+    # Electronics, Technology, Telecom PSUs
+    "ECIL": "https://ecil.co.in/job_openings.php",
+    "C-DAC": "https://cdac.in/index.aspx?id=jobcurrent",
+    "NPCIL": "https://npcil.nic.in/Content.aspx?&MenuID=24",
+    "BSNL": "https://www.bsnl.co.in/opencms/bsnl/BSNL/career/index.html",
+
+    # Railways & Transport
+    "Indian Railways (RRB/RRC)": "https://indianrailways.gov.in/railwayboard/view_section.jsp?lang=0&id=0,1,304,366,558",
+    "DMRC (Delhi Metro)": "https://delhimetrorail.com/careers",
+    "MRVC": "https://mrvc.indianrailways.gov.in/view_section.jsp?lang=0&id=0,294,302",
+
+    # Atomic, Research, Nuclear Engineering
+    "BARC": "https://recruit.barc.gov.in/barcrecruit/",
+    "ISRO IPRC / LPSC / VSSC Units": "https://www.isro.gov.in/Careers.html",  # central portal
+    "DAE (Dept of Atomic Energy)": "https://dpsdae.formflix.in/",
+
+    # Heavy Engineering & Manufacturing PSUs
+    "SAIL": "https://sailcareers.com/",
+    "NALCO": "https://nalcoindia.com/careers/",
+    "NMDC": "https://www.nmdc.co.in/Careers",
+    "HMT Machine Tools": "http://www.hmtmachinetools.com/careers.html",
+
+    # Oil & Mining
+    "Coal India": "https://www.coalindia.in/career-cil/",
+    "Oil India": "https://www.oil-india.com/Current_openings",
+    "NLC India": "https://www.nlcindia.in/new_website/careers/CAREERS.htm",
+
+    # Science & Research Labs
+    "CSIR": "https://www.csir.res.in/career-opportunities",
+    "IISc": "https://iisc.ac.in/positions-open/",
+    "IITs (Common)": "https://iitb.ac.in/en/careers"  # IIT Bombay as representative
 }
 
 KEYWORDS = ["engineer", "recruitment", "vacancy", "it", "assistant", "scientist"]
